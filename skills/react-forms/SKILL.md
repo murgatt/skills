@@ -241,6 +241,7 @@ The hook accepts `defaultValues` only when a caller needs to prefill the form �
 - The submit handler comes **from the parent as an `onSubmit` prop**, typed `(values: …FormOutput) => void | Promise<void>`. The form component validates and collects; it does not know what the values are for. That's what lets the component be the unit of reuse.
 - It is wired on the **form element**: `<form onSubmit={handleSubmit(onSubmit)}>`. Not on the button's `onClick` — that skips Enter-to-submit and breaks keyboard users.
 - There is always a `<button type="submit">` inside the form. The explicit `type` matters because a button's default type is `submit` in HTML but `button` in some component libraries, and the ambiguity is not worth carrying.
+- Everything after `onSubmit` — the mutation, server rejections, mapping server validation errors onto fields, success feedback — belongs to the caller and is out of scope for this skill. Don't add a `setError('root.serverError')` or a `reset()` on success inside the form component: that ties the form to one caller's API and stops it being reusable.
 
 ### The button is not disabled
 
@@ -369,3 +370,4 @@ Run through this for every form you created or edited:
 - [ ] Extracted fields only where the test in rule 5 says so, named `<FormName><Field>`, taking `control` — built from `references/field-component.md`
 - [ ] No `watch` or `formState` destructured from `useForm` / `useFormContext`
 - [ ] No `FormProvider` unless rule 7 justifies it — and then following `references/form-provider.md`
+- [ ] Lint and typecheck pass on every file you touched, using the commands in the project's `AGENTS.md` if present, or in package.json otherwise
