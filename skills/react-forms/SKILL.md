@@ -32,11 +32,11 @@ Three more files exist only when earned:
 
 ```ts
 // invite-member-form.schema.ts
-import { z } from "zod";
+import { z } from 'zod';
 
 export const inviteMemberFormSchema = z.object({
-  email: z.email("Enter a valid email address"),
-  role: z.enum(["member", "admin"]).default("member"),
+  email: z.email('Enter a valid email address'),
+  role: z.enum(['member', 'admin']).default('member'),
 });
 
 export type InviteMemberFormInput = z.input<typeof inviteMemberFormSchema>;
@@ -45,15 +45,15 @@ export type InviteMemberFormOutput = z.output<typeof inviteMemberFormSchema>;
 
 ```ts
 // useInviteMemberForm.ts
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { DefaultValues } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import type { DefaultValues } from 'react-hook-form';
 
-import { inviteMemberFormSchema } from "./invite-member-form.schema";
+import { inviteMemberFormSchema } from './invite-member-form.schema';
 import type {
   InviteMemberFormInput,
   InviteMemberFormOutput,
-} from "./invite-member-form.schema";
+} from './invite-member-form.schema';
 
 type UseInviteMemberFormOptions = {
   defaultValues?: DefaultValues<InviteMemberFormInput>;
@@ -64,7 +64,7 @@ export function useInviteMemberForm({
 }: UseInviteMemberFormOptions = {}) {
   return useForm<InviteMemberFormInput, unknown, InviteMemberFormOutput>({
     defaultValues,
-    mode: "onTouched",
+    mode: 'onTouched',
     resolver: zodResolver(inviteMemberFormSchema),
   });
 }
@@ -72,14 +72,14 @@ export function useInviteMemberForm({
 
 ```tsx
 // InviteMemberForm.tsx
-import { useFormState } from "react-hook-form";
-import type { DefaultValues } from "react-hook-form";
+import { useFormState } from 'react-hook-form';
+import type { DefaultValues } from 'react-hook-form';
 
-import { useInviteMemberForm } from "./useInviteMemberForm";
+import { useInviteMemberForm } from './useInviteMemberForm';
 import type {
   InviteMemberFormInput,
   InviteMemberFormOutput,
-} from "./invite-member-form.schema";
+} from './invite-member-form.schema';
 
 type InviteMemberFormProps = {
   defaultValues?: DefaultValues<InviteMemberFormInput>;
@@ -100,12 +100,12 @@ export function InviteMemberForm({
       <label htmlFor="invite-member-email">Email</label>
       <input
         aria-describedby={
-          errors.email ? "invite-member-email-error" : undefined
+          errors.email ? 'invite-member-email-error' : undefined
         }
         aria-invalid={!!errors.email}
         id="invite-member-email"
         type="email"
-        {...register("email")}
+        {...register('email')}
       />
       {errors.email && (
         <p id="invite-member-email-error" role="alert">
@@ -114,13 +114,13 @@ export function InviteMemberForm({
       )}
 
       <label htmlFor="invite-member-role">Role</label>
-      <select id="invite-member-role" {...register("role")}>
+      <select id="invite-member-role" {...register('role')}>
         <option value="member">Member</option>
         <option value="admin">Admin</option>
       </select>
 
       <button disabled={isSubmitting} type="submit">
-        {isSubmitting ? "Sending…" : "Send invite"}
+        {isSubmitting ? 'Sending…' : 'Send invite'}
       </button>
     </form>
   );
@@ -137,7 +137,7 @@ The canonical example shows the prefilled variant only because it's the larger o
 // useInviteMemberForm.ts — a create-only form
 export function useInviteMemberForm() {
   return useForm<InviteMemberFormInput, unknown, InviteMemberFormOutput>({
-    mode: "onTouched",
+    mode: 'onTouched',
     resolver: zodResolver(inviteMemberFormSchema),
   });
 }
@@ -175,8 +175,8 @@ This matters because a shared schema or a shared hook looks harmless right up un
 
 ```ts
 // ❌ don't import another form's internals
-import { inviteMemberFormSchema } from "../InviteMemberForm/invite-member-form.schema";
-import { useInviteMemberForm } from "../InviteMemberForm/useInviteMemberForm";
+import { inviteMemberFormSchema } from '../InviteMemberForm/invite-member-form.schema';
+import { useInviteMemberForm } from '../InviteMemberForm/useInviteMemberForm';
 ```
 
 If two forms genuinely share a _validation primitive_ (a password strength rule, a phone format), extract that primitive — `passwordSchema`, `phoneSchema` — to a shared module and compose it inside each form's own schema. Sharing a field rule is fine; sharing a whole form schema is not.
@@ -221,7 +221,7 @@ The hook contains the `useForm` call and nothing else — no mutations, no side 
 // ✅
 return useForm<InviteMemberFormInput, unknown, InviteMemberFormOutput>({
   defaultValues,
-  mode: "onTouched",
+  mode: 'onTouched',
   resolver: zodResolver(inviteMemberFormSchema),
 });
 ```
@@ -266,7 +266,7 @@ The one exception is a submit already in flight, where blocking a second click p
 
 // ✅ otherwise, disabled plus a visible pending indicator
 <button disabled={isSubmitting} type="submit">
-  {isSubmitting ? "Sending…" : "Send invite"}
+  {isSubmitting ? 'Sending…' : 'Send invite'}
 </button>
 ```
 
@@ -321,14 +321,14 @@ const {
   register,
   watch,
 } = useInviteMemberForm();
-const email = watch("email");
+const email = watch('email');
 ```
 
 ```tsx
 // ✅
 const { control, handleSubmit, register } = useInviteMemberForm();
 const { errors, isSubmitting } = useFormState({ control });
-const email = useWatch({ control, name: "email" });
+const email = useWatch({ control, name: 'email' });
 ```
 
 Those two members are special, for two different reasons.

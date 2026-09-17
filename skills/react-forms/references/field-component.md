@@ -10,21 +10,21 @@ The field component takes `control` as a prop, and that prop needs a type. Decla
 
 ```ts
 // invite-member-form.types.ts
-import type { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from 'react-hook-form';
 
 import type {
   InviteMemberFormInput,
   InviteMemberFormOutput,
-} from "./invite-member-form.schema";
+} from './invite-member-form.schema';
 
 export type InviteMemberFormControl = UseFormReturn<
   InviteMemberFormInput,
   unknown,
   InviteMemberFormOutput
->["control"];
+>['control'];
 ```
 
-Deriving the alias from `UseFormReturn[…]["control"]` rather than writing `Control<Input, unknown, Output>` by hand means the three generics are stated once, in the one place that already has to state them.
+Deriving the alias from `UseFormReturn[…]['control']` rather than writing `Control<Input, unknown, Output>` by hand means the three generics are stated once, in the one place that already has to state them.
 
 Create this file only when a field component imports from it. A form with no extracted fields has no types file.
 
@@ -34,10 +34,10 @@ It lives in the form folder, is named `<FormName><Field>.tsx`, takes only `contr
 
 ```tsx
 // InviteMemberFormTeamField.tsx
-import { useController, useWatch } from "react-hook-form";
+import { useController, useWatch } from 'react-hook-form';
 
-import { useTeams } from "@/hooks/useTeams";
-import type { InviteMemberFormControl } from "./invite-member-form.types";
+import { useTeams } from '@/hooks/useTeams';
+import type { InviteMemberFormControl } from './invite-member-form.types';
 
 type InviteMemberFormTeamFieldProps = {
   control: InviteMemberFormControl;
@@ -46,18 +46,18 @@ type InviteMemberFormTeamFieldProps = {
 export function InviteMemberFormTeamField({
   control,
 }: InviteMemberFormTeamFieldProps) {
-  const role = useWatch({ control, name: "role" });
-  const { field, fieldState } = useController({ control, name: "teamId" });
-  const { data: teams = [] } = useTeams({ enabled: role === "member" });
+  const role = useWatch({ control, name: 'role' });
+  const { field, fieldState } = useController({ control, name: 'teamId' });
+  const { data: teams = [] } = useTeams({ enabled: role === 'member' });
 
-  if (role !== "member") return null;
+  if (role !== 'member') return null;
 
   return (
     <div>
       <label htmlFor="invite-member-team">Team</label>
       <TeamSelect
         aria-describedby={
-          fieldState.error ? "invite-member-team-error" : undefined
+          fieldState.error ? 'invite-member-team-error' : undefined
         }
         aria-invalid={fieldState.invalid}
         id="invite-member-team"

@@ -10,7 +10,7 @@ The main form component is the only place that renders `FormProvider`. It keeps 
 
 ```tsx
 // InviteMemberForm.tsx
-import { FormProvider, useFormState } from "react-hook-form";
+import { FormProvider, useFormState } from 'react-hook-form';
 
 // …
 
@@ -39,12 +39,12 @@ Create `use<FormName>Context.ts` in the form folder. It is the only place in the
 
 ```ts
 // useInviteMemberFormContext.ts
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
 import type {
   InviteMemberFormInput,
   InviteMemberFormOutput,
-} from "./invite-member-form.schema";
+} from './invite-member-form.schema';
 
 export function useInviteMemberFormContext() {
   return useFormContext<
@@ -81,8 +81,8 @@ const {
 
 // ✅
 const { control } = useInviteMemberFormContext();
-const { errors } = useFormState({ control, name: "email" });
-const role = useWatch({ control, name: "role" });
+const { errors } = useFormState({ control, name: 'email' });
+const role = useWatch({ control, name: 'role' });
 ```
 
 ## Checklist
