@@ -36,7 +36,6 @@ import { z } from "zod";
 
 export const inviteMemberFormSchema = z.object({
   email: z.email("Enter a valid email address"),
-  message: z.string().trim().max(500).optional(),
   role: z.enum(["member", "admin"]).default("member"),
 });
 
@@ -114,7 +113,11 @@ export function InviteMemberForm({
         </p>
       )}
 
-      {/* role and message follow the same pattern */}
+      <label htmlFor="invite-member-role">Role</label>
+      <select id="invite-member-role" {...register("role")}>
+        <option value="member">Member</option>
+        <option value="admin">Admin</option>
+      </select>
 
       <button disabled={isSubmitting} type="submit">
         {isSubmitting ? "Sending…" : "Send invite"}
