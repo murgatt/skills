@@ -131,7 +131,7 @@ export function InviteMemberForm({
 
 ### `defaultValues` only when the form is prefilled
 
-This form takes `defaultValues` because it is also used to edit an existing invite (rule 1). A form that only ever starts empty leaves it out everywhere: the hook takes no argument and the component has no `defaultValues` prop.
+The canonical example shows the prefilled variant only because it's the larger of the two shapes — a form with no `defaultValues` is the more common case. A form that only ever starts empty leaves it out everywhere: the hook takes no argument and the component has no `defaultValues` prop.
 
 ```ts
 // useInviteMemberForm.ts — a create-only form
@@ -342,7 +342,7 @@ Those two members are special, for two different reasons.
 Two details:
 
 - Destructuring the object returned by `useFormState` is fine and expected — the rule is about `useForm` and `useFormContext`.
-- Prefer naming what you need: `useFormState({ control, name: 'email' })` and `useWatch({ control, name: 'email' })` subscribe to one field rather than the whole form.
+- Scope the subscription to what the component owns. The main form component reads state for several fields at once, so it subscribes to the whole form with `useFormState({ control })`, as the canonical example does. A component that owns a single field subscribes by name to just what it needs — `useFormState({ control, name: 'teamId' })`, `useWatch({ control, name: 'role' })` — so unrelated changes don't re-render it.
 
 ## 7. FormProvider
 
