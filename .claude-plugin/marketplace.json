@@ -1,0 +1,23 @@
+{
+  "name": "murgatt-skills",
+  "description": "Théo's personal Claude Code skills",
+  "owner": {
+    "name": "Théo"
+  },
+  "plugins": [
+    {
+      "name": "react-forms",
+      "description": "House rules for building React forms with react-hook-form and Zod: folder layout, schema typing, validation mode, submit wiring and field extraction.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/react-forms"]
+    },
+    {
+      "name": "save-handoff",
+      "description": "Save a pasted brainstorm handoff document into docs/decisions/ and offer to start implementing from it.",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/save-handoff"]
+    }
+  ]
+}
