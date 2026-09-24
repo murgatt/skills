@@ -1,0 +1,37 @@
+{
+  "skill_name": "save-handoff",
+  "evals": [
+    {
+      "id": 1,
+      "name": "happy-path-fenced-accented-title",
+      "prompt": "/save-handoff\n```markdown\n# Decision: SQLite façade for offline notes\n\nDate: 2026-09-20\n\n## Context\n\nThe app currently keeps offline notes in `localStorage`, which caps out around 5 MB and blocks the main thread on every write.  Users with >2k notes hit the cap.\n\n## Options considered\n\n### Option A: IndexedDB via idb-keyval\n* Pros: zero deps beyond a tiny wrapper\n* Cons: no queries, we'd reimplement search\n\n### Option B: SQLite (wa-sqlite + OPFS)\n* Pros: real queries, FTS5 for search\n* Cons: ~900 KB wasm, needs COOP/COEP headers\n\n## Decision\n\nOption B — wa-sqlite with the OPFS backend, running in a dedicated worker.\n\n## Rationale\n\nSearch was the deciding factor; reimplementing it on top of IndexedDB was estimated at more work than the header change.\n\n## Implementation notes\n\n- Worker entry: `src/db/worker.ts`\n- Schema v1:\n\n```ts\nCREATE TABLE notes (id TEXT PRIMARY KEY, body TEXT, updated_at INTEGER);\n```\n\n- migrate existing localStorage data once, on first boot , then clear it\n\n## Open questions\n\n- Do we need a fallback for Safari < 17 (no OPFS sync handles)?\n```",
+      "setup": "project",
+      "expected_output": "docs/decisions/2026-09-20-sqlite-facade-for-offline-notes (accent stripped, 'decision' dropped).md containing the handoff byte-for-byte without the outer ```markdown fence (inner ```ts fence kept); nothing staged or committed; asks whether to start the implementation session and does not start it.",
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "default-dir-missing",
+      "prompt": "/save-handoff\n# Decision: SQLite façade for offline notes\n\nDate: 2026-09-20\n\n## Context\n\nThe app currently keeps offline notes in `localStorage`, which caps out around 5 MB and blocks the main thread on every write.  Users with >2k notes hit the cap.\n\n## Options considered\n\n### Option A: IndexedDB via idb-keyval\n* Pros: zero deps beyond a tiny wrapper\n* Cons: no queries, we'd reimplement search\n\n### Option B: SQLite (wa-sqlite + OPFS)\n* Pros: real queries, FTS5 for search\n* Cons: ~900 KB wasm, needs COOP/COEP headers\n\n## Decision\n\nOption B — wa-sqlite with the OPFS backend, running in a dedicated worker.\n\n## Rationale\n\nSearch was the deciding factor; reimplementing it on top of IndexedDB was estimated at more work than the header change.\n\n## Implementation notes\n\n- Worker entry: `src/db/worker.ts`\n- Schema v1:\n\n```ts\nCREATE TABLE notes (id TEXT PRIMARY KEY, body TEXT, updated_at INTEGER);\n```\n\n- migrate existing localStorage data once, on first boot , then clear it\n\n## Open questions\n\n- Do we need a fallback for Safari < 17 (no OPFS sync handles)?\n",
+      "setup": "project-without-decisions",
+      "expected_output": "docs/decisions/ does not exist: asks whether to create and use docs/decisions/ or use another path, and writes nothing.",
+      "assertions": []
+    },
+    {
+      "id": 3,
+      "name": "collision-with-placeholder-date",
+      "prompt": "/save-handoff\n# Rate limiting public API\n\nDate: <today's date, if known>\n\n## Context\n\nThe public `/v1/notes` endpoints have no rate limiting; one integration hammered them last week.\n\n## Decision\n\nToken bucket per API key, 60 req/min, enforced in the edge middleware.\n\n## Implementation notes\n\n- Return 429 with a `Retry-After` header.\n",
+      "setup": "project+collision",
+      "expected_output": "Date line is a placeholder so today's date (2026-09-24) is used; docs/decisions/2026-09-24-rate-limiting-public-api.md already exists: asks overwrite vs suffix, leaves the existing file untouched and writes nothing.",
+      "assertions": []
+    },
+    {
+      "id": 4,
+      "name": "no-content-pasted",
+      "prompt": "/save-handoff",
+      "setup": "project",
+      "expected_output": "Asks the user to paste the handoff markdown and stops; writes nothing.",
+      "assertions": []
+    }
+  ]
+}
