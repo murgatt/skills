@@ -2,30 +2,28 @@
 name: save-handoff
 description: Save a pasted brainstorm handoff document (decision record from the brainstorm-handoff skill) into the project as docs/decisions/YYYY-MM-DD-<slug>.md, then offer to start implementing from it.
 disable-model-invocation: true
-argument-hint: "[target-dir] <pasted handoff markdown>"
+argument-hint: "<pasted handoff markdown>"
 ---
 
 # Save handoff
 
 The user brainstormed a decision in a chat, got a handoff document out of it, and pasted it here so it lives in the repo as a versioned record. Your job is clerical: put the document in the right place under a predictable name, exactly as written, then hand control back.
 
-## 1. Split the arguments
+## 1. Read the document
 
-Everything after `/save-handoff` arrived as:
+Everything after `/save-handoff` is the document:
 
 $ARGUMENTS
 
-- If the first line is a single token with no spaces that doesn't start with `#` (e.g. `docs/adr` or `notes/decisions/`), it is the target directory. Everything after it is the document.
-- Otherwise there's no target path and the whole thing is the document.
-- If the whole document is wrapped in one outer code fence (```` ```markdown ```` … ```` ``` ````), drop that outer fence — the handoff skill emits its output inside a fence for easy copying, so the fence is packaging, not content. Leave any inner fences alone.
+If it's wrapped in one outer code fence (```` ```markdown ```` … ```` ``` ````), drop that outer fence — the handoff skill emits its output inside a fence for easy copying, so the fence is packaging, not content. Leave any inner fences alone.
 
-If there is no document — nothing pasted, or only a path — ask the user to paste the handoff markdown and stop there.
+If nothing was pasted, ask the user to paste the handoff markdown and stop there.
 
 ## 2. Resolve the target directory
 
-Paths are relative to the repository root (`git rev-parse --show-toplevel`; fall back to the current directory outside a git repo). Default is `docs/decisions/`.
+Save into `docs/decisions/` at the repository root (`git rev-parse --show-toplevel`; fall back to the current directory outside a git repo).
 
-If the directory doesn't exist, don't create it on your own — a new top-level folder is the user's call. Ask whether to create it (the path they gave, or `docs/decisions/` by default) or to use a different path they name, and wait for the answer. If they give a different path, check that one too.
+If it doesn't exist, don't create it on your own — a new top-level folder is the user's call. Ask whether to create and use `docs/decisions/` or to use a different path they name (relative to the repo root), and wait for the answer. If they name a different path that doesn't exist either, confirm before creating it.
 
 ## 3. Build the filename: `YYYY-MM-DD-<slug>.md`
 
